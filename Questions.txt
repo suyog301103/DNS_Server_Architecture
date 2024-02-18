@@ -1,0 +1,2 @@
+1) How does the local DNS know what to fill in the Type field of the query?
+2) 
