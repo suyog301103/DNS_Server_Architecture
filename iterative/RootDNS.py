@@ -11,16 +11,24 @@ root_serverSocket.bind(('', root_DNS_port))
 # This PORT NUMBER IS stored in the dictionary
 TLD_IPs = {'com' : 6000, 'edu' : 6001, 'org' : 6002}
 
-root_message, root_address = root_serverSocket.recvfrom(4096).decode()
-root_string = root_message.decode()
-TLD_dict = json.loads(root_string)
-TLD = TLD_dict["Questions"]["Name"][-1:-4:-1]
+while True:
+    #receiveing from the local DNS
+    local_DNS_message, local_DNS_address = root_serverSocket.recvfrom(16384)
 
-if TLD == 'com' :
-    port = TLD_IPs['com']
+    # # PROCESSING.....
+    root_string = json.loads(local_DNS_message)
+    TLD = root_string["Questions"]["Name"][-3:]
+    print("TLD extracted = ", TLD)
 
-elif TLD == 'edu' :
-    port = TLD_IPs['edu']
+    if TLD == 'com' :
+        port = TLD_IPs['com']
 
-else :
-    port = TLD_IPs['org']
+    elif TLD == 'edu' :
+        port = TLD_IPs['edu']
+
+    else :
+        port = TLD_IPs['org']
+
+    # sending the ip address of the respective TLD server back to the local DNS server
+    print("Sending message to Local DNS : ", port)
+    root_serverSocket.sendto(str(port).encode(), (local_DNS_address))
