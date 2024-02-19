@@ -21,7 +21,7 @@ cache = []
 
 while True :
     # receiving query from client
-    message, clientAddress = local_serverSocket.recvfrom(4096)        # can receive max of 4 KB
+    message, clientAddress = local_serverSocket.recvfrom(16384)        # can receive max of 4 KB
     print("Received request for : ", message.decode(), 'from IP address', clientAddress[0])
     
     flag = 0                   # found in cache
@@ -35,12 +35,11 @@ while True :
     if flag == 0 :
         # have to query the Root DNS
         query = DNS_query_format
-        # query["Header"]["Transaction_ID"] = random.randint(1, 10)
-        # query["Header"]["Flags"] = "some_Flag"
-        # query["Questions"]["Name"] = message.decode()
-        # query["Questions"]["Type"] = "A"
-        # query["Questions"]["Class"] = "IN"
-        query["Questions"] = message.decode()
+        query["Header"]["Transaction_ID"] = random.randint(1, 10)
+        query["Header"]["Flags"] = "some_Flag"
+        query["Questions"]["Name"] = message.decode()
+        query["Questions"]["Type"] = "A"
+        query["Questions"]["Class"] = "IN"
 
         # Sending message to Root DNS
         # json.dumps() being used to maintain double quotes around the dict keys
@@ -48,14 +47,16 @@ while True :
         local_serverSocket.sendto(json.dumps(query).encode(), (All_Servers_IP, root_DNS_port))
 
         # # Receving response from Root DNS
-        # root_response = local_serverSocket.recvfrom(4096).decode()
-        # print("Received response = ", root_response.decode(), 'from Root DNS\n')
+        root_response, root_DNS_address = local_serverSocket.recvfrom(16384)
+        root_response = root_response.decode()
+        print("Received response = ", root_response, 'from Root DNS\n')
 
-    #     # Caching the received response
-    #     if (len_cache < 10) :
-    #         to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
-    #         cache.append(to_cache)
-    #         len_cache += 1
+        # # Caching the received response
+        # if (len_cache < 10) :
+        #     to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
+        #     cache.append(to_cache)
+        #     len_cache += 1
         
-    #     # Sending response to client
-    #     local_serverSocket.sendto(root_response["Address"], clientAddress)
+        # Sending response to client
+        #local_serverSocket.sendto(root_response["Address"], clientAddress)
+        local_serverSocket.sendto(root_response.encode(), clientAddress)

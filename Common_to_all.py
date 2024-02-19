@@ -1,13 +1,13 @@
-# DNS_query_format = {"Header" : {"Transaction_ID" : "", 
-#                                  "Flags" : "",
-#                                  "Question Count" : 1,
-#                                  "Answer Count" : 0,
-#                                  "Authority RR" : 0,
-#                                  "Additional RR" : 0},
-#                     "Questions" : {"Name" : "",
-#                                    "Type" : "",
-#                                    "Class" : ""}}
-DNS_query_format = {"Header" : "Something", "Questions" : ""}
+DNS_query_format = {"Header" : {"Transaction_ID" : 0, 
+                                 "Flags" : "",
+                                 "Question Count" : 1,
+                                 "Answer Count" : 0,
+                                 "Authority RR" : 0,
+                                 "Additional RR" : 0},
+                    "Questions" : {"Name" : "",
+                                   "Type" : "",
+                                   "Class" : ""}}
+
 
 
 DNS_response_format = {"Name" : "",

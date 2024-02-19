@@ -1,5 +1,6 @@
 from socket import *
 from Common_to_all import *
+import json
 
 # .com TLD port
 google_auth_port = 7000
@@ -10,8 +11,9 @@ google_server_socket.bind(('', google_auth_port))
 Services_IP = {"drive" : 8000, "youtube" : 8001, "classroom" : 8002}
 
 while True :
-    com_TLD_message, com_TLD_address = google_server_socket.recvfrom(4096)
+    com_TLD_message, com_TLD_address = google_server_socket.recvfrom(16384)
     message = com_TLD_message.decode()
+    message = json.loads(message)
     
     if ("drive" in com_TLD_message.decode()):
         port= Services_IP["drive"]
@@ -34,4 +36,4 @@ while True :
     response["Class"] = message["Questions"]["Class"]
     response["Address"] = port
 
-    google_server_socket.sendto(response, com_TLD_address)
+    google_server_socket.sendto((json.dumps(response)).encode(), com_TLD_address)
