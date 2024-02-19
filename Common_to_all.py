@@ -1,12 +1,14 @@
-DNS_query_format = {"Header" : {"Transaction_ID" : "", 
-                                 "Flags" : "",
-                                 "Question Count" : 1,
-                                 "Answer Count" : 0,
-                                 "Authority RR" : 0,
-                                 "Additional RR" : 0},
-                    "Questions" : {"Name" : "",
-                                   "Type" : "",
-                                   "Class" : ""}}
+# DNS_query_format = {"Header" : {"Transaction_ID" : "", 
+#                                  "Flags" : "",
+#                                  "Question Count" : 1,
+#                                  "Answer Count" : 0,
+#                                  "Authority RR" : 0,
+#                                  "Additional RR" : 0},
+#                     "Questions" : {"Name" : "",
+#                                    "Type" : "",
+#                                    "Class" : ""}}
+DNS_query_format = {"Header" : "Something", "Questions" : ""}
+
 
 DNS_response_format = {"Name" : "",
                         "Type" : "",
@@ -16,4 +18,4 @@ DNS_response_format = {"Name" : "",
                         "Address" : 0, 
                         "CNAME" : ""}
 
-All_Servers_IP = "127.0.30.30"
+All_Servers_IP = "192.168.94.179"

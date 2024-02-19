@@ -1,6 +1,7 @@
 from socket import *
 import random
 from Common_to_all import *
+import json
 
 # IP ADDRESS FOR WHOLE DNS SYSTEM - THIS COMPUTER
 # SHOULD UPDATE EVERY TIME NETWORK IS JOINED NEWLY !!!!!!!!!!!!!!!!!!
@@ -34,23 +35,27 @@ while True :
     if flag == 0 :
         # have to query the Root DNS
         query = DNS_query_format
-        query["Header"]["Transaction_ID"] = random.randint(1, 10)
-        query["Header"]["Flags"] = "some_Flag"
-        query["Questions"]["Name"] = message.decode()
-        query["Questions"]["Type"] = "A"
-        query["Questions"]["Class"] = "IN"
+        # query["Header"]["Transaction_ID"] = random.randint(1, 10)
+        # query["Header"]["Flags"] = "some_Flag"
+        # query["Questions"]["Name"] = message.decode()
+        # query["Questions"]["Type"] = "A"
+        # query["Questions"]["Class"] = "IN"
+        query["Questions"] = message.decode()
 
-        # Local DNS server is the client to Root DNS
-        local_serverSocket.sendto(str(query).encode(), (All_Servers_IP, local_DNS_port))
+        # Sending message to Root DNS
+        # json.dumps() being used to maintain double quotes around the dict keys
+        # without double quotes around keys, json.loads() will not work
+        local_serverSocket.sendto(json.dumps(query).encode(), (All_Servers_IP, root_DNS_port))
 
-        # Receving response from Root DNS
-        root_response = local_serverSocket.recvfrom(4096).decode()
+        # # Receving response from Root DNS
+        # root_response = local_serverSocket.recvfrom(4096).decode()
+        # print("Received response = ", root_response.decode(), 'from Root DNS\n')
 
-        # Caching the received response
-        if (len_cache < 10) :
-            to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
-            cache.append(to_cache)
-            len_cache += 1
+    #     # Caching the received response
+    #     if (len_cache < 10) :
+    #         to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
+    #         cache.append(to_cache)
+    #         len_cache += 1
         
-        # Sending response to client
-        local_serverSocket.sendto(root_response["Address"], clientAddress)
+    #     # Sending response to client
+    #     local_serverSocket.sendto(root_response["Address"], clientAddress)
