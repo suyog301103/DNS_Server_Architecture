@@ -18,4 +18,4 @@ DNS_response_format = {"Name" : "",
                         "Address" : 0, 
                         "CNAME" : ""}
 
-All_Servers_IP = "192.168.94.179"
+All_Servers_IP = "192.168.0.104"

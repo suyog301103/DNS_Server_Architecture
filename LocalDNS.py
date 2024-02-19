@@ -20,9 +20,11 @@ len_cache = 0
 cache = []
 
 while True :
+    print("Local DNS - ON\n")
+
     # receiving query from client
     message, clientAddress = local_serverSocket.recvfrom(16384)        # can receive max of 4 KB
-    print("Received request for : ", message.decode(), 'from IP address', clientAddress[0])
+    # print("Received request for : ", message.decode(), 'from IP address', clientAddress[0])
     
     flag = 0                   # found in cache
     # 1) Check cache
@@ -30,6 +32,8 @@ while True :
         if cache_elem[0] == message.decode() :
             flag = 1
             IP_address = cache_elem[1]
+            local_serverSocket.sendto(IP_address.encode(), clientAddress)
+            break
     
     # 2) If not found in cache....
     if flag == 0 :
@@ -48,15 +52,13 @@ while True :
 
         # # Receving response from Root DNS
         root_response, root_DNS_address = local_serverSocket.recvfrom(16384)
-        root_response = root_response.decode()
-        print("Received response = ", root_response, 'from Root DNS\n')
+        root_response = json.loads(root_response.decode())
 
-        # # Caching the received response
-        # if (len_cache < 10) :
-        #     to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
-        #     cache.append(to_cache)
-        #     len_cache += 1
+        # Caching the received response
+        if (len_cache < 10) :
+            to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
+            cache.append(to_cache)
+            len_cache += 1
         
         # Sending response to client
-        #local_serverSocket.sendto(root_response["Address"], clientAddress)
-        local_serverSocket.sendto(root_response.encode(), clientAddress)
+        local_serverSocket.sendto(str(root_response["Address"]).encode(), clientAddress)

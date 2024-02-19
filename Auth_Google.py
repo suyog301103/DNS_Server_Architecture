@@ -11,6 +11,8 @@ google_server_socket.bind(('', google_auth_port))
 Services_IP = {"drive" : 8000, "youtube" : 8001, "classroom" : 8002}
 
 while True :
+    print("Google Auth DNS - ON\n")
+
     com_TLD_message, com_TLD_address = google_server_socket.recvfrom(16384)
     message = com_TLD_message.decode()
     message = json.loads(message)

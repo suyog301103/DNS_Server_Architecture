@@ -10,6 +10,8 @@ com_server_socket.bind(('', com_DNS_port))
 Auth_IPs = {'google' : 7000, 'amazon' : 7001, 'flipkart' : 7002}
 
 while True :
+    print(".com TLD - ON\n")
+
     # Receiving message from Root DNS
     root_DNS_message, root_DNS_address = com_server_socket.recvfrom(16384)
 
@@ -38,4 +40,5 @@ while True :
     auth_response, authAddress = com_server_socket.recvfrom(16384)
 
     #Sending response to Root server here..
+    print("Auth -> TLD : ", auth_response.decode())
     com_server_socket.sendto(auth_response, root_DNS_address)
