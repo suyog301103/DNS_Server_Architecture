@@ -18,4 +18,13 @@ DNS_response_format = {"Name" : "",
                         "Address" : 0, 
                         "CNAME" : ""}
 
+'''
+- URL(client request??), Class, Type
+- Query time
+- IP address
+- WHEN
+- MSG SIZE rcvd : (data length)
+
+'''
+
 All_Servers_IP = "192.168.94.179"

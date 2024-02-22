@@ -15,21 +15,24 @@ local_serverSocket.bind(('', local_DNS_port))
 # ROOT DNS INFO
 root_DNS_port = 52311
 
-# Cache structure = [(Name, Address, Type)]
+# Cache structure = [{DNS_Response_Format}]
 len_cache = 0
 cache = []
 
 while True :
+    print("Local DNS - ON\n")
+
     # receiving query from client
     message, clientAddress = local_serverSocket.recvfrom(16384)        # can receive max of 4 KB
-    print("Received request for : ", message.decode(), 'from IP address', clientAddress[0])
+    # print("Received request for : ", message.decode(), 'from IP address', clientAddress[0])
     
     flag = 0                   # found in cache
     # 1) Check cache
     for cache_elem in cache : 
-        if cache_elem[0] == message.decode() :
+        if cache_elem['Name'] == message.decode() :
             flag = 1
-            IP_address = cache_elem[1]
+            local_serverSocket.sendto((json.dumps(cache_elem)).encode(), clientAddress)
+            break
     
     # 2) If not found in cache....
     if flag == 0 :
@@ -48,15 +51,13 @@ while True :
 
         # # Receving response from Root DNS
         root_response, root_DNS_address = local_serverSocket.recvfrom(16384)
-        root_response = root_response.decode()
-        print("Received response = ", root_response, 'from Root DNS\n')
+        root_response = json.loads(root_response.decode()) # dictionary
 
-        # # Caching the received response
-        # if (len_cache < 10) :
-        #     to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
-        #     cache.append(to_cache)
-        #     len_cache += 1
+        # Caching the received response
+        if (len_cache < 10) :
+            cache.append(root_response)
+            len_cache += 1
         
         # Sending response to client
-        #local_serverSocket.sendto(root_response["Address"], clientAddress)
-        local_serverSocket.sendto(root_response.encode(), clientAddress)
+        print("Local DNS server received : ", root_response)
+        local_serverSocket.sendto((json.dumps(root_response)).encode(), clientAddress)

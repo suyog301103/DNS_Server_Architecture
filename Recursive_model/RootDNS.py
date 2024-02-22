@@ -12,15 +12,15 @@ root_serverSocket.bind(('', root_DNS_port))
 TLD_IPs = {'com' : 6000, 'edu' : 6001, 'org' : 6002}
 
 while True:
+    print("Root DNS - ON\n")
     # receiving query from Local DNS
     local_DNS_message, local_DNS_address = root_serverSocket.recvfrom(16384)
     TLD_string = local_DNS_message.decode()
-    print("@Root DNS, received : ", TLD_string)
+    # print("@Root DNS, received : ", TLD_string)
 
     # # PROCESSING.....
     TLD_dict = json.loads(TLD_string)
     TLD = TLD_dict["Questions"]["Name"][-3:]
-    print("TLD extracted = ", TLD)
     
     if TLD == 'com' :
         port = TLD_IPs['com']
