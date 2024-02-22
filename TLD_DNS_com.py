@@ -7,7 +7,7 @@ com_DNS_port = 6000
 com_server_socket = socket(AF_INET, SOCK_DGRAM)
 com_server_socket.bind(('', com_DNS_port))
 
-Auth_IPs = {'google' : 7000, 'amazon' : 7001, 'flipkart' : 7002}
+Auth_IPs = {'google' : 7000, 'amazon' : 7001, 'flipkart' : 7002, 'goDaddy' : 7003}
 
 while True :
     print(".com TLD - ON\n")
@@ -17,7 +17,6 @@ while True :
 
     # # PROCESSING..........
     root_DNS_message = json.loads(root_DNS_message.decode())        # brought down to dict form
-    print(root_DNS_message)
     
     if 'google' in root_DNS_message["Questions"]["Name"] :
         port = Auth_IPs['google']

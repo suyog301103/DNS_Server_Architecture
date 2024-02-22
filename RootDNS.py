@@ -21,7 +21,6 @@ while True:
     # # PROCESSING.....
     TLD_dict = json.loads(TLD_string)
     TLD = TLD_dict["Questions"]["Name"][-3:]
-    print("TLD extracted = ", TLD)
     
     if TLD == 'com' :
         port = TLD_IPs['com']
@@ -39,7 +38,6 @@ while True:
 
     # Receiving response from TLD server
     TLD_response, TLD_address = root_serverSocket.recvfrom(16384)
-    print("TLD -> Root : ", TLD_response.decode())
 
     # Passing on response to Local DNS
     print("Sending message to Local DNS : ", TLD_response.decode())
