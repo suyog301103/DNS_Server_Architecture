@@ -38,8 +38,6 @@ while True :
         if cache_elem[0] == message.decode() :
             flag = 1
             IP_address = cache_elem[1]
-            local_serverSocket.sendto(str(IP_address).encode(), clientAddress)
-            break
     
     # 2) If not found in cache....
     if flag == 0 :
@@ -102,11 +100,11 @@ while True :
         local_serverSocket.sendto(auth_response, clientAddress)
         
 
-        # Caching the received response
-        if (len_cache < 10) :
-            to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
-            cache.append(to_cache)
-            len_cache += 1
+        # # Caching the received response
+        # if (len_cache < 10) :
+        #     to_cache = (root_response['Name'], root_response['Address'], root_response["Type"])
+        #     cache.append(to_cache)
+        #     len_cache += 1
         
         # # Sending response to client
         # #local_serverSocket.sendto(root_response["Address"], clientAddress)
