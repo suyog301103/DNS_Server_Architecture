@@ -8,3 +8,5 @@ client_socket.bind(('', client_port))
 while True : 
     client_query = input("Enter query : ")
     client_socket.sendto(client_query.encode(), (All_Servers_IP, 53))
+    local_dns_message, local_dns_address = client_socket.recvfrom(16348)
+    print("IP address (Port number here) : ", local_dns_message.decode())
